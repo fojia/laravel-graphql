@@ -1,0 +1,48 @@
+version: '3.2'
+services:
+  web:
+    image: nginx:stable-alpine
+    restart: always
+    links:
+      - php
+    ports:
+      - "8182:80"
+    volumes:
+      - ./docker/local/config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./:/var/www/html:rw
+    networks:
+      - internal
+  php:
+    build:
+      context: .
+      dockerfile: ./docker/local/dockerfiles/dockerfile_php7
+    restart: always
+    links:
+      - db
+    volumes:
+      - ./:/var/www/html:rw
+    networks:
+      - internal
+  db:
+    image: mysql:8.0.13
+    restart: always
+    ports:
+      - "3307:3306"
+    networks:
+      - internal
+  nodejs:
+    build:
+      context: .
+      dockerfile: ./docker/local/dockerfiles/dockerfile_nodejs
+    restart: always
+    ports:
+      - "8183:8080"
+    volumes:
+      - ./:/var/www/html:rw
+    networks:
+      - internal
+
+networks:
+  internal:
+
+
