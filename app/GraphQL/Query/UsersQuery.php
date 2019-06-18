@@ -2,6 +2,7 @@
 
 namespace App\GraphQL\Query;
 
+use App\GraphQL\CustomTypes\DateTimeType;
 use App\User;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
@@ -30,6 +31,10 @@ class UsersQuery extends Query
             'email' => [
                 'name' => 'email',
                 'type' => Type::string()
+            ],
+            'created_at' => [
+                'name' => 'created_at',
+                'type' => Type::string(),
             ]
         ];
     }
@@ -43,11 +48,13 @@ class UsersQuery extends Query
             if (isset($args['email'])) {
                 $query->where('email', $args['email']);
             }
+
         };
         $user = User::with(array_keys($fields->getRelations()))
             ->where($where)
             ->select($fields->getSelect())
             ->paginate();
+
         return $user;
     }
 }

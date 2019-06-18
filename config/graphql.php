@@ -121,7 +121,8 @@ return [
     // ]
     //
     'types' => [
-        'users' => \App\GraphQL\Type\UsersType::class
+        'users' => \App\GraphQL\Type\UsersType::class,
+        'DateTimeType' => \App\GraphQL\Scalars\DateTimeType::class,
         // 'example'           => ExampleType::class,
         // 'relation_example'  => ExampleRelationType::class,
     ],

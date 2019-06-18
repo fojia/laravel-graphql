@@ -2,38 +2,44 @@
 
 namespace App\GraphQL\Type;
 
+use App\GraphQL\Scalars\DateTimeType;
 use App\User;
 use GraphQL\Type\Definition\Type;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
 class UsersType extends GraphQLType
 {
     protected $attributes = [
         'name' => 'Users',
-        'description' => 'A type',
-        'model' => User::class,
+        'model' => User::class
     ];
 
     public function fields()
     {
         return [
             'id' => [
-                'type' => Type::nonNull(Type::int()),
-                'description' => 'The id of the user'
+                'type' => Type::nonNull(Type::int())
             ],
             'email' => [
-                'type' => Type::string(),
-                'description' => 'The email of user'
+                'type' => Type::string()
             ],
             'name' => [
-                'type' => Type::string(),
-                'description' => 'The name of the user'
+                'type' => Type::string()
+            ],
+            'created_at' => [
+//                'type' => GraphQL::type('DateTimeType'),
+                'type' => GraphQL::type('DateTimeType'),
+                'args' => [
+                    'format' => Type::string(),
+                    'object' => Type::boolean()
+                ],
+                'resolve' => function ($source, $args) {
+                    $date = new DateTimeType($args);
+
+                    return $date->serialize($source->created_at);
+                }
             ]
         ];
-    }
-
-    protected function resolveEmailField($root, $args)
-    {
-        return strtolower($root->email);
     }
 }
