@@ -24,6 +24,5 @@
         "sass": "^1.15.2",
         "sass-loader": "^7.1.0"
     },
-    "dependencies": {
-    }
+    "dependencies": {}
 }
